@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,6 +9,9 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 # Configuración estética de gráficos
 plt.style.use("ggplot")
+
+output_dir = "output"
+os.makedirs(output_dir, exist_ok=True)
 
 # Cargar CSV
 df = pd.read_csv("fintech_top_sintetico_2025.csv")
@@ -160,7 +165,8 @@ print(df_no_outliers.shape)
 # Crear histogramas para todas las columnas numéricas
 df.hist(figsize=(12, 8))
 plt.tight_layout()
-plt.show()
+plt.savefig(os.path.join(output_dir, "histogramas.png"), dpi=150)
+plt.close()
 
 # ==========================================================
 # GRÁFICOS DE DISPERSIÓN
@@ -175,7 +181,9 @@ if len(numeric_cols) >= 2:
     plt.xlabel(numeric_cols[0])
     plt.ylabel(numeric_cols[1])
     plt.title("Gráfico de Dispersión")
-    plt.show()
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, "dispersion.png"), dpi=150)
+    plt.close()
 
 # ==========================================================
 # BOX PLOTS POR SEGMENTO
@@ -189,7 +197,8 @@ if "Segment" in df.columns and "Revenue_USD_M" in df.columns:
     plt.xticks(rotation=45, ha="right")
     plt.ylabel("Ingresos (USD Millones)")
     plt.tight_layout()
-    plt.show()
+    plt.savefig(os.path.join(output_dir, "boxplot_ingresos_segmento.png"), dpi=150)
+    plt.close()
 
 # ==========================================================
 # INGRESOS PROMEDIO POR REGIÓN (GRÁFICO DE BARRAS)
@@ -205,7 +214,8 @@ if "Region" in df.columns and "Revenue_USD_M" in df.columns:
     plt.ylabel("Ingresos Promedio (USD Millones)")
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
-    plt.show()
+    plt.savefig(os.path.join(output_dir, "ingresos_promedio_region.png"), dpi=150)
+    plt.close()
 
 # ==========================================================
 # LABEL ENCODING
@@ -228,7 +238,8 @@ plt.figure(figsize=(12, 10))
 sns.heatmap(df_label.corr(), annot=True, fmt=".2f", cmap="coolwarm", cbar_kws={"label": "Correlación"})
 plt.title("Matriz de Correlación (Valores Anotados)")
 plt.tight_layout()
-plt.show()
+plt.savefig(os.path.join(output_dir, "matriz_correlacion.png"), dpi=150)
+plt.close()
 
 # ==========================================================
 # ESCALAMIENTO
