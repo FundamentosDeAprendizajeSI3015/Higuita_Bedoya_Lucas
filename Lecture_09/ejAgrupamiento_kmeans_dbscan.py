@@ -48,6 +48,31 @@ def guardar_scatter(data_2d, ruta_salida, titulo, labels=None):
     plt.close(fig)
 
 
+def guardar_scatter_label_binario(data_2d, labels, ruta_salida, titulo):
+    fig, ax = plt.subplots()
+
+    colores = {0: "#1f77b4", 1: "#ff7f0e"}
+    for valor in [0, 1]:
+        mascara = labels == valor
+        if np.any(mascara):
+            ax.scatter(
+                data_2d[mascara, 0],
+                data_2d[mascara, 1],
+                s=18,
+                alpha=0.85,
+                color=colores[valor],
+                label=f"Label {valor}",
+            )
+
+    ax.set_title(titulo)
+    ax.set_xlabel("Componente principal 1")
+    ax.set_ylabel("Componente principal 2")
+    ax.legend(loc="best")
+    fig.set_size_inches(5 * 1.6, 5)
+    fig.savefig(ruta_salida, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+
 def main():
     base_dir = Path(__file__).resolve().parent
     dataset_path = base_dir / "dataset_sintetico_FIRE_UdeA_realista.csv"
@@ -90,6 +115,21 @@ def main():
         output_dir / "01_dataset_proyectado_pca.png",
         "Dataset FIRE UdeA (proyeccion PCA en 2D)",
     )
+
+    if "label" in df.columns:
+        labels_reales = pd.to_numeric(df["label"], errors="coerce").to_numpy()
+        mascara_binaria = np.isin(labels_reales, [0, 1])
+        if np.any(mascara_binaria):
+            guardar_scatter_label_binario(
+                data_2d[mascara_binaria],
+                labels_reales[mascara_binaria].astype(int),
+                output_dir / "01b_labels_0_1.png",
+                "Dataset FIRE UdeA (labels 0 y 1)",
+            )
+        else:
+            print("No se encontraron registros con label 0 o 1 para graficar.")
+    else:
+        print("La columna 'label' no existe en el dataset.")
 
     clu_kmeans_k2 = Pipeline(
         steps=[
