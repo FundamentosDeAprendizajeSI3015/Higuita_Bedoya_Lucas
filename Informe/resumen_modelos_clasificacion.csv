@@ -1,0 +1,5 @@
+modelo,dataset_entrenamiento,accuracy_vs_proxy,f1_macro_vs_proxy,accuracy_vs_original,f1_macro_vs_original
+Arbol_Decision,original,0.936,0.9569531525697916,0.778,0.8056219042609325
+Arbol_Decision,reevaluado,1.0,1.0,0.78,0.8193154780843731
+Regresion_Logistica,original,0.901,0.921804221250224,0.772,0.7878470876976755
+Regresion_Logistica,reevaluado,1.0,1.0,0.78,0.8193154780843731
